@@ -35,6 +35,12 @@ register_activation_hook( __FILE__, 'custom_select_activate' );
 add_action( 'admin_init', 'register_custom_select_settings' );
 function register_custom_select_settings() {
   register_setting( 'custom-select-settings-group', 'custom_select_selector' );
+
+  @check_custom_select_dependencies_are_active(
+    "Custom Select", 
+    array(
+      "Tom M8te" => array("plugin"=>"tom-m8te/tom-m8te.php", "url" => "http://downloads.wordpress.org/plugin/tom-m8te.zip", "version" => "1.4.2"))
+  );
 }
 
 add_action('admin_menu', 'register_custom_select_page');

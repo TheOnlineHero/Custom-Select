@@ -17,9 +17,9 @@ Allows you to stylise your select boxes and makes them look more appealing. For 
 
 1) Install WordPress 3.5.2 or higher
 
-2) Download the following files:
-http://downloads.wordpress.org/plugin/tom-m8te.1.4.2.zip
-http://downloads.wordpress.org/plugin/custom-select.1.0.zip
+2) Download the latest files from:
+http://wordpress.org/extend/plugins/tom-m8te 
+http://wordpress.org/extend/plugins/custom-select
 
 3) Login to WordPress admin, click on Plugins / Add New / Upload, then upload the zip file you just downloaded.
 

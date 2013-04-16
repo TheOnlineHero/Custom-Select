@@ -35,12 +35,11 @@ register_activation_hook( __FILE__, 'custom_select_activate' );
 add_action( 'admin_init', 'register_custom_select_settings' );
 function register_custom_select_settings() {
   register_setting( 'custom-select-settings-group', 'custom_select_selector' );
-
-  @check_custom_select_dependencies_are_active(
-    "Custom Select", 
-    array(
-      "Tom M8te" => array("plugin"=>"tom-m8te/tom-m8te.php", "url" => "http://downloads.wordpress.org/plugin/tom-m8te.zip", "version" => "1.4.2"))
-  );
+  $msg_content = "<div class='updated'><p>Sorry for the confusion but you must install and activate Tom M8te before you can use Custom Select. Please go to Plugins/Add New and search/install the following plugin: Tom M8te </p></div>";
+  if (!is_plugin_active("tom-m8te/tom-m8te.php")) {
+    deactivate_plugins(__FILE__, true);
+    echo($msg_content);
+  }   
 }
 
 add_action('admin_menu', 'register_custom_select_page');
@@ -108,43 +107,6 @@ function add_custom_select_js_and_css() {
   wp_enqueue_style("custom-select");
   
 }
-
-function check_custom_select_dependencies_are_active($plugin_name, $dependencies) {
-  $msg_content = "<div class='updated'><p>Sorry for the confusion but you must install and activate ";
-  $plugins_array = array();
-  $upgrades_array = array();
-  define('PLUGINPATH', ABSPATH.'wp-content/plugins');
-  foreach ($dependencies as $key => $value) {
-    $plugin = get_plugin_data(PLUGINPATH."/".$value["plugin"],true,true);
-    $url = $value["url"];
-    if (!is_plugin_active($value["plugin"])) {
-      array_push($plugins_array, $key);
-    } else {
-      if (isset($value["version"]) && str_replace(".", "", $plugin["Version"]) < str_replace(".", "", $value["version"])) {
-        array_push($upgrades_array, $key);
-      }
-    }
-  }
-  $msg_content .= implode(", ", $plugins_array) . " before you can use $plugin_name. Please go to Plugins/Add New and search/install the following plugin(s): ";
-  $download_plugins_array = array();
-  foreach ($dependencies as $key => $value) {
-    if (!is_plugin_active($value["plugin"])) {
-      $url = $value["url"];
-      array_push($download_plugins_array, $key);
-    }
-  }
-  $msg_content .= implode(", ", $download_plugins_array)."</p></div>";
-  if (count($plugins_array) > 0) {
-    deactivate_plugins( __FILE__, true);
-    echo($msg_content);
-  } 
-
-  if (count($upgrades_array) > 0) {
-    deactivate_plugins( __FILE__,true);
-    echo "<div class='updated'><p>$plugin_name requires the following plugins to be updated: ".implode(", ", $upgrades_array).".</p></div>";
-  }
-}
-
 
 // Copy directory to another location.
 function custom_select_copy_directory($src,$dst) { 
